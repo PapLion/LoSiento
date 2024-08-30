@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenia tiempo libre</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            transition: background-color 1s ease;
+        }
+
+        .heart {
+            background-color: crimson;
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            position: relative;
+            top: 0;
+            transform: rotate(-45deg);
+            position: absolute;
+            left: 40%;
+            top: 40%;
+            animation: heartbeat 1.25s infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            background-color: crimson;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: absolute;
+            animation: pulsecolor 1.25s infinite;
+        }
+
+        .heart::before {
+            top: -100px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 100px;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1) rotate(-45deg);
+            }
+            10% {
+                transform: scale(1.25) rotate(-45deg);
+                background-color: #EF395E;
+            }
+            100% {
+                transform: scale(1) rotate(-45deg);
+            }
+        }
+
+        @keyframes pulsecolor {
+            10% {
+                background-color: #EF395E;
+            }
+        }
+
+        .little-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .little-heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+
+        .little-heart::before,
+        .little-heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            top: -10px;
+        }
+
+        .little-heart::before {
+            left: -10px;
+        }
+
+        .little-heart::after {
+            right: -10px;
+        }
+
+        .big-text,
+        .easter-egg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            color: white;
+            display: none;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 2s ease;
+            text-align: center;
+        }
+
+        .big-text {
+            font-size: 60px;
+        }
+
+        .easter-egg {
+            font-size: 24px;
+            color: black;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
+        }
+
+        .text-item {
+            font-size: 30px;
+            color: #fff;
+            margin: 20px 0;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .text-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-item.hide {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart" id="heart"></div>
+
+    <div class="little-hearts" id="little-hearts"></div>
+    <div class="big-text" id="big-text">TE AMO</div>
+
+    <div class="text-container" id="text-container">
+        <div class="text-item">Te prometo que todo irá bien amor</div>
+        <div class="text-item">Haré lo que me pides tranquila, simplemente mi corazón quería hacer esto :3</div>
+        <div class="text-item">Nunca dejaré de amarte ok? Y también trataré de arreglar todo esto que tanto nos lastima...</div>
+        <div class="text-item">Te amó</div>
+        <div class="text-item">Y perdón</div>
+        <div class="text-item">Otra vez</div>
+    </div>
+
+    <div class="easter-egg" id="easter-egg">Si te preguntas por qué esta innecesaria animación es porque... Así late mi corazón por ti :3</div>
+
+    <script>
+        const heart = document.getElementById('heart');
+        const littleHearts = document.getElementById('little-hearts');
+        const bigText = document.getElementById('big-text');
+        const textContainer = document.getElementById('text-container');
+        const easterEgg = document.getElementById('easter-egg');
+        const textItems = document.querySelectorAll('.text-item');
+
+        heart.addEventListener('click', () => {
+            document.body.style.backgroundColor = 'black';
+            littleHearts.style.display = 'block';
+            bigText.style.display = 'block';
+            setTimeout(() => bigText.style.opacity = '1', 500);
+            heart.style.display = 'none';
+
+            for (let i = 0; i < 100; i++) {
+                const heartElement = document.createElement('div');
+                heartElement.classList.add('little-heart');
+                heartElement.style.top = `${Math.random() * 100}%`;
+                heartElement.style.left = `${Math.random() * 100}%`;
+                heartElement.style.animation = `fly ${Math.random() * 2 + 3}s linear infinite`;
+                littleHearts.appendChild(heartElement);
+            }
+
+            // Show text items one by one
+            let currentIndex = 0;
+            const showNextText = () => {
+                if (currentIndex < textItems.length) {
+                    textItems[currentIndex].classList.add('show');
+                    setTimeout(() => {
+                        textItems[currentIndex].classList.add('hide');
+                        setTimeout(() => {
+                            textItems[currentIndex].classList.remove('show', 'hide');
+                            currentIndex++;
+                            showNextText();
+                        }, 1000);
+                    }, 3000);
+                } else {
+                    setTimeout(() => {
+                        // Fade out everything and show easter egg
+                        textContainer.style.opacity = '0';
+                        littleHearts.style.opacity = '0';
+                        bigText.style.opacity = '0';
+                        setTimeout(() => {
+                            textContainer.style.display = 'none';
+                            littleHearts.style.display = 'none';
+                            bigText.style.display = 'none';
+                            document.body.style.backgroundColor = '#f5f5f5';
+                            easterEgg.style.display = 'block';
+                            easterEgg.style.opacity = '1';
+                        }, 1000);
+                    }, 3000);
+                }
+            };
+
+            showNextText();
+        });
+
+        // Optional: Heart animation (floating hearts)
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fly {
+                from {
+                    transform: translateY(0) rotate(45deg);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateY(-150vh) rotate(45deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>
